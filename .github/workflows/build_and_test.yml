@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
-    - name: Azure CLI Install
+    - name: Azure Login
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
