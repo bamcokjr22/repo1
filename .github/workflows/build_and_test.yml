@@ -18,11 +18,11 @@ jobs:
 #       with:
 #         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: AKS Cluster Setup
-      run: |
-        az group create --name SNC-AKS-RG --location centralus
-        az acr create --resource-group SNC-AKS-RG --name sncacr --sku Basic
-        az aks create --resource-group SNC-AKS-RG --name SNCAKSCluster --node-count 2 --generate-ssh-keys --attach-acr SNCACR
+#     - name: AKS Cluster Setup
+#       run: |
+#         az group create --name SNC-AKS-RG --location centralus
+#         az acr create --resource-group SNC-AKS-RG --name sncacr --sku Basic
+#         az aks create --resource-group SNC-AKS-RG --name SNCAKSCluster --node-count 2 --generate-ssh-keys --attach-acr SNCACR
         
     - name: Deploy Kubernetes APP
       run: kubectl apply -f $GITHUB_WORKSPACE/azure-vote-all-in-one-redis.yaml
