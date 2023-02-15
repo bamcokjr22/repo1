@@ -17,7 +17,13 @@ jobs:
 #       uses: azure/login@v1
 #       with:
 #         creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+    
+    - name: AKS Cluster Setup
+      run: |
+        az group create --name SNC-AKS-RG --location centralus
+        az acr create --resource-group SNC-AKS-RG --name SNCACR --sku Basic
+        az aks create --resource-group SNC-AKS-RG --name SNCAKSCluster --node-count 2 --generate-ssh-keys --attach-acr SNCACR
+        
     - name: Checkout
       uses: actions/checkout@v1
 
