@@ -17,10 +17,10 @@
       "value": "eslzlaworkspace" // To be changed
     },
     "vnetName": {
-      "value": "VNet-SPOKE" // To be changed
+      "value": "VNet-SPOKE"
     },
     "subnetName": {
-      "value": "AKS" // To be changed
+      "value": "AKS"
     },
     "appGatewayName": {
       "value": "APPGW" // To be changed
