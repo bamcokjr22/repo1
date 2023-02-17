@@ -19,7 +19,6 @@ param clusterIdentity string
 param clusterCount int
 param agentPoolProfileName string
 param agentPoolMode string
-param agentPoolType string
 
 module rg 'modules/resource-group/rg.bicep' = {
   name: rgName
