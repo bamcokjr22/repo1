@@ -3,36 +3,36 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "rgName": {
-      "value": "ESLZ-SPOKE"
+      "value": "ESLZ-SPOKE" // To be changed
     },
     "aadGroupdIds": {
       "value": [
-        "8a6ce56b-b114-401d-aa98-50c4ee724a5c"
+        "8a6ce56b-b114-401d-aa98-50c4ee724a5c" // To be changed
       ]
     },
     "clusterName": {
-      "value": "eslzakscluster"
+      "value": "eslzakscluster" // To be changed
     },
     "akslaWorkspaceName": {
-      "value": "eslzlaworkspace"
+      "value": "eslzlaworkspace" // To be changed
     },
     "vnetName": {
-      "value": "VNet-SPOKE"
+      "value": "VNet-SPOKE" // To be changed
     },
     "subnetName": {
-      "value": "AKS"
+      "value": "AKS" // To be changed
     },
     "appGatewayName": {
-      "value": "APPGW"
+      "value": "APPGW" // To be changed
     },
     "aksuseraccessprincipalId": {
-      "value": "8a6ce56b-b114-401d-aa98-50c4ee724a5c"
+      "value": "8a6ce56b-b114-401d-aa98-50c4ee724a5c" // To be changed
     },
     "aksadminaccessprincipalId": {
-      "value": "8a6ce56b-b114-401d-aa98-50c4ee724a5c"
+      "value": "8a6ce56b-b114-401d-aa98-50c4ee724a5c" // To be changed
     },
     "aksIdentityName": {
-      "value": "aksIdentity"
+      "value": "aksIdentity" // To be changed
     }
   }
 }
