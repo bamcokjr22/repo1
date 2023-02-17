@@ -3,36 +3,84 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "rgName": {
-      "value": "ESLZ-SPOKE" // To be changed
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.KeyVault/vaults/<vault-name>"
+        },
+        "secretName": "rgName"
+      }
     },
     "aadGroupdIds": {
-      "value": [
-        "8a6ce56b-b114-401d-aa98-50c4ee724a5c" // To be changed
-      ]
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.KeyVault/vaults/<vault-name>"
+        },
+        "secretName": "aadGroupdIds"
+      }
     },
     "clusterName": {
-      "value": "eslzakscluster" // To be changed
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.KeyVault/vaults/<vault-name>"
+        },
+        "secretName": "clusterName"
+      }
     },
     "akslaWorkspaceName": {
-      "value": "eslzlaworkspace" // To be changed
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.KeyVault/vaults/<vault-name>"
+        },
+        "secretName": "akslaWorkspaceName"
+      }
     },
     "vnetName": {
-      "value": "VNet-SPOKE"
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.KeyVault/vaults/<vault-name>"
+        },
+        "secretName": "vnetName"
+      }
     },
     "subnetName": {
-      "value": "AKS"
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.KeyVault/vaults/<vault-name>"
+        },
+        "secretName": "subnetName"
+      }
     },
     "appGatewayName": {
-      "value": "APPGW" // To be changed
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.KeyVault/vaults/<vault-name>"
+        },
+        "secretName": "appGatewayName"
+      }
     },
     "aksuseraccessprincipalId": {
-      "value": "8a6ce56b-b114-401d-aa98-50c4ee724a5c" // To be changed
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.KeyVault/vaults/<vault-name>"
+        },
+        "secretName": "aksuseraccessprincipalId"
+      }
     },
     "aksadminaccessprincipalId": {
-      "value": "8a6ce56b-b114-401d-aa98-50c4ee724a5c" // To be changed
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.KeyVault/vaults/<vault-name>"
+        },
+        "secretName": "aksadminaccessprincipalId"
+      }
     },
     "aksIdentityName": {
-      "value": "aksIdentity" // To be changed
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/<subscription-id>/resourceGroups/<rg-name>/providers/Microsoft.KeyVault/vaults/<vault-name>"
+        },
+        "secretName": "aksIdentityName"
+      }
     }
   }
 }

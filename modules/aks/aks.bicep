@@ -17,7 +17,7 @@ param agentPoolType string
 var dockerBridgeCidr = '172.17.0.1/16'
 var dnsServiceIP = '192.168.100.10'
 var serviceCidr = '192.168.100.0/24'
-var networkPolicy = 'calico'
+var networkPolicy = 'snsnetworkpolicy'
 var outboundType = 'userDefinedRouting'
 var networkPlugin = 'azure'
 
