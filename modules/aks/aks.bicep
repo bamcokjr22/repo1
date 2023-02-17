@@ -4,17 +4,32 @@ param aadGroupdIds array
 param subnetId string
 param identity object
 param appGatewayResourceId string
+param vmSize string
+param osDiskSize int
+param kubernetesVersion string
+param clusterIdentity string
+param clusterCount int
+param agentPoolProfileName string
+param agentPoolMode string
+param agentPoolType string
 //param appGatewayIdentityResourceId string
+
+var dockerBridgeCidr = '172.17.0.1/16'
+var dnsServiceIP = '192.168.100.10'
+var serviceCidr = '192.168.100.0/24'
+var networkPolicy = 'calico'
+var outboundType = 'userDefinedRouting'
+var networkPlugin = 'azure'
 
 resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-07-01' = {
   name: clusterName
   location: resourceGroup().location
   identity: {
-    type: 'UserAssigned'
+    type: clusterIdentity
     userAssignedIdentities: identity
   }
   properties: {
-    kubernetesVersion: '1.21.1'
+    kubernetesVersion: kubernetesVersion
     nodeResourceGroup: '${clusterName}-aksInfraRG'
     podIdentityProfile: {
       enabled: false
@@ -22,22 +37,22 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-07-01' = {
     dnsPrefix: '${clusterName}aks'
     agentPoolProfiles: [
       {
-        name: 'defaultpool'
-        mode: 'System'
-        count: 3
-        vmSize: 'Standard_DS2_v2'
-        osDiskSizeGB: 30
-        type: 'VirtualMachineScaleSets'
+        name: agentPoolProfileName
+        mode: agentPoolMode
+        count: clusterCount
+        vmSize: vmSize
+        osDiskSizeGB: osDiskSize
+        type: agentPoolType
         vnetSubnetID: subnetId
       }
     ]
     networkProfile: {
-      networkPlugin: 'azure'
-      outboundType: 'userDefinedRouting'
-      dockerBridgeCidr: '172.17.0.1/16'
-      dnsServiceIP: '192.168.100.10'
-      serviceCidr: '192.168.100.0/24'
-      networkPolicy: 'calico'
+      networkPlugin: networkPlugin
+      outboundType: outboundType
+      dockerBridgeCidr: dockerBridgeCidr
+      dnsServiceIP: dnsServiceIP
+      serviceCidr: serviceCidr
+      networkPolicy: networkPolicy
     }
     apiServerAccessProfile: {
       enablePrivateCluster: false
