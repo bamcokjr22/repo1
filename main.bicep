@@ -12,6 +12,14 @@ param aksadminaccessprincipalId string
 param aksIdentityName string
 param acrName string //User to provide each time
 param keyvaultName string //user to provide each time
+param vmSize string
+param osDiskSize int
+param kubernetesVersion string
+param clusterIdentity string
+param clusterCount int
+param agentPoolProfileName string
+param agentPoolMode string
+param agentPoolType string
 
 module rg 'modules/resource-group/rg.bicep' = {
   name: rgName
@@ -61,6 +69,14 @@ module aksCluster 'modules/aks/aks.bicep' = {
     clusterName: clusterName
     logworkspaceid: akslaworkspace.outputs.laworkspaceId
     subnetId: aksSubnet.id
+    clusterIdentity: clusterIdentity
+    clusterCount: clusterCount
+    vmSize: vmSize
+    osDiskSize: osDiskSize
+    kubernetesVersion: kubernetesVersion
+    agentPoolProfileName: agentPoolProfileName
+    agentPoolMode: agentPoolMode
+    agentPoolType: agentPoolMode
     identity: {
       '${aksIdentity.id}' : {}
     }
