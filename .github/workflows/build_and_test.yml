@@ -65,4 +65,3 @@ jobs:
 #         inlineScript: |
 #           chmod +x $GITHUB_WORKSPACE/sampleScript.sh
 #           $GITHUB_WORKSPACE/sampleScript.sh
-
