@@ -26,7 +26,8 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./aks-deployment.bicep
-        parameters: 'storagePrefix=mystore storageSKU=Standard_LRS'
+        # parameters: 'storagePrefix=mystore storageSKU=Standard_LRS'
+        parameters: 'resourcePrefix=mystore storageSKU=Standard_LRS'
         failOnStdErr: false
 # on:
 #   push:
