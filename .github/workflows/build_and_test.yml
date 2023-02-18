@@ -1,19 +1,42 @@
-name: Build and Test
+on: [push]
 
-on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
-
+name: Azure ARM
 jobs:
-
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+
+      # Checkout code
+    - uses: actions/checkout@main
+
+      # Log into Azure
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Deploy Bicep file
+    - name: deploy
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: ${{ secrets.AZURE_RG }}
+        template: ./main.bicep
+        parameters: 'storagePrefix=mystore storageSKU=Standard_LRS'
+        failOnStdErr: false
+# on:
+#   push:
+#     branches: [master]
+#   pull_request:
+#     branches: [master]
+
+# jobs:
+
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+#     steps:
     
-    - name: Azure Login
-      run: az login --service-principal -u ${{ secrets.appId }} -p ${{ secrets.password }} --tenant ${{ secrets.tenant }}
+#     - name: Azure Login
+#       run: az login --service-principal -u ${{ secrets.appId }} -p ${{ secrets.password }} --tenant ${{ secrets.tenant }}
 #       uses: azure/login@v1
 #       with:
 #         creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -24,11 +47,11 @@ jobs:
 #         az acr create --resource-group SNC-AKS-RG --name sncacr --sku Basic
 #         az aks create --resource-group SNC-AKS-RG --name SNCAKSCluster --node-count 2 --generate-ssh-keys --attach-acr SNCACR
         
-    - name: Deploy Kubernetes APP
-      run: kubectl apply -f $GITHUB_WORKSPACE/azure-vote-all-in-one-redis.yaml
+    # - name: Deploy Kubernetes APP
+    #   run: kubectl apply -f $GITHUB_WORKSPACE/azure-vote-all-in-one-redis.yaml
         
-    - name: Checkout
-      uses: actions/checkout@v1
+    # - name: Checkout
+    #   uses: actions/checkout@v1
 
 #     - name: Azure CLI script file
 #       uses: azure/CLI@v1
