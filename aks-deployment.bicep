@@ -18,3 +18,4 @@ module aks 'aks-cluster.bicep' = {
     clusterName: resourcePrefix
   }
 }
+
