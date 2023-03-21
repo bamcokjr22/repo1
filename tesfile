@@ -1,12 +1,95 @@
-module routeTable 'modules/network/userdefinedroute.bicep' = {
-  scope: resourceGroup
-  name: 'sncroutetable'
-  params: {
-    location: variables.location
-    routeTableAddressPrefix: variables.routeTableAddressPrefix
-    routeTableName: variables.routeTableName
-    routeName: variables.routeName
-    routeTableNextHopIPAddress: variables.routeTableNextHopIPAddress
-    routeTableNextHopType: variables.routeTableNextHopType
-  }
+{
+    "storageAccountName": "sncstora",
+    "sku": "Standard_LRS",
+    "kind": "StorageV2",
+    "publicIPName": "snstestpip",
+    "publicIPAllocationMethod": "Static",
+    "appGWName": "snctestappgw",
+    "appGWSKU": "Standard_Small",
+    "appGWTier": "Standard",
+    "appGWCapacity": 1,
+    "appGWFrontendIPConfigurationName": "",
+    "routeTableName": "sncroutetable",
+    "routeName": "sncRoute",
+    "routeTableAddressPrefix": "0.0.0.0/0",
+    "routeTableNextHopType": "None",
+    "routeTableNextHopIPAddress": "",
+    "location": "CentralUS", 
+    "subnets": [
+        {
+            "name": "sncsubnet",
+            "subnetPrefix": "10.0.0.0/24"
+        },
+        {
+            "name": "apimSubnet",
+            "subnetPrefix": "10.0.1.0/24" 
+        },
+        {
+            "name": "appgwSubnet",
+            "subnetPrefix": "10.0.2.0/24"
+        }
+    ],
+    "nsgs": [
+    {
+        "name": "nsg1",
+        "rules": [{
+            "name": "rule1",
+            "properties": {
+                "protocol": "Tcp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "*",
+                "sourceAddressPrefix": "VirtualNetwork",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Inbound"
+            }
+        },
+        {
+            "name": "rule2",
+            "properties": {
+                "protocol": "Tcp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "80",
+                "sourceAddressPrefix": "VirtualNetwork",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 200,
+                "direction": "Inbound"
+            }
+        }]
+    },
+    {
+        "name": "nsg2",
+        "rules": [{
+            "name": "rule3",
+            "properties": {
+                "protocol": "Tcp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "VirtualNetwork",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Inbound"
+            }
+        }]
+    },
+    {
+        "name": "nsg3",
+        "rules": [{
+            "name": "rule4",
+            "properties": {
+                "protocol": "Tcp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "VirtualNetwork",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Inbound"
+            }
+        }]
+    }
+]
 }
