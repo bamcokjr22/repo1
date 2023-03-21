@@ -1,10 +1,26 @@
-resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2020-06-01' = [for nsg in nsgs.nsgs: {
-  name: nsg.name
+param routeTableName string
+param routeName string
+param location string
+param routeTableAddressPrefix string
+param routeTableNextHopType string
+param routeTableNextHopIPAddress string
+ 
+resource routeTable 'Microsoft.Network/routeTables@2021-02-01' = {
+  name: routeTableName
   location: location
   properties: {
-    securityRules: [for rule in nsg.rules: {
-      name: rule.name
-      properties: rule.properties
-    }]
+    disableBgpRoutePropagation: false
+    routes: [
+      {
+        name: routeName
+        properties: {
+          addressPrefix: routeTableAddressPrefix 
+          nextHopType: routeTableNextHopType
+          nextHopIpAddress: routeTableNextHopIPAddress
+        }
+      }
+    ]
   }
-}]
+}
+
+output routeTableId string = routeTable.id
