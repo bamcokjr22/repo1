@@ -1,95 +1,26 @@
-{
-    "storageAccountName": "sncstora",
-    "sku": "Standard_LRS",
-    "kind": "StorageV2",
-    "publicIPName": "snstestpip",
-    "publicIPAllocationMethod": "Static",
-    "appGWName": "snctestappgw",
-    "appGWSKU": "Standard_Small",
-    "appGWTier": "Standard",
-    "appGWCapacity": 1,
-    "appGWFrontendIPConfigurationName": "",
-    "routeTableName": "sncroutetable",
-    "routeName": "sncRoute",
-    "routeTableAddressPrefix": "0.0.0.0/0",
-    "routeTableNextHopType": "None",
-    "routeTableNextHopIPAddress": "",
-    "location": "CentralUS", 
-    "subnets": [
-        {
-            "name": "sncsubnet",
-            "subnetPrefix": "10.0.0.0/24"
-        },
-        {
-            "name": "apimSubnet",
-            "subnetPrefix": "10.0.1.0/24" 
-        },
-        {
-            "name": "appgwSubnet",
-            "subnetPrefix": "10.0.2.0/24"
+param routeTableName string
+param routeName string
+param location string
+param routeTableAddressPrefix string
+param routeTableNextHopType string
+param routeTableNextHopIPAddress string
+ 
+resource routeTable 'Microsoft.Network/routeTables@2021-02-01' = {
+  name: routeTableName
+  location: location
+  properties: {
+    disableBgpRoutePropagation: false
+    routes: [
+      {
+        name: routeName
+        properties: {
+          addressPrefix: routeTableAddressPrefix 
+          nextHopType: routeTableNextHopType
+          nextHopIpAddress: routeTableNextHopIPAddress
         }
-    ],
-    "nsgs": [
-    {
-        "name": "nsg1",
-        "rules": [{
-            "name": "rule1",
-            "properties": {
-                "protocol": "Tcp",
-                "sourcePortRange": "*",
-                "destinationPortRange": "*",
-                "sourceAddressPrefix": "VirtualNetwork",
-                "destinationAddressPrefix": "*",
-                "access": "Allow",
-                "priority": 100,
-                "direction": "Inbound"
-            }
-        },
-        {
-            "name": "rule2",
-            "properties": {
-                "protocol": "Tcp",
-                "sourcePortRange": "*",
-                "destinationPortRange": "80",
-                "sourceAddressPrefix": "VirtualNetwork",
-                "destinationAddressPrefix": "*",
-                "access": "Allow",
-                "priority": 200,
-                "direction": "Inbound"
-            }
-        }]
-    },
-    {
-        "name": "nsg2",
-        "rules": [{
-            "name": "rule3",
-            "properties": {
-                "protocol": "Tcp",
-                "sourcePortRange": "*",
-                "destinationPortRange": "22",
-                "sourceAddressPrefix": "VirtualNetwork",
-                "destinationAddressPrefix": "*",
-                "access": "Allow",
-                "priority": 100,
-                "direction": "Inbound"
-            }
-        }]
-    },
-    {
-        "name": "nsg3",
-        "rules": [{
-            "name": "rule4",
-            "properties": {
-                "protocol": "Tcp",
-                "sourcePortRange": "*",
-                "destinationPortRange": "22",
-                "sourceAddressPrefix": "VirtualNetwork",
-                "destinationAddressPrefix": "*",
-                "access": "Allow",
-                "priority": 100,
-                "direction": "Inbound"
-            }
-        }]
-    }
-]
+      }
+    ]
+  }
 }
+
+output routeTableId string = routeTable.id
