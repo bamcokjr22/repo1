@@ -1,23 +1,71 @@
-resource network 'Microsoft.Network/virtualNetworks@2022-07-01' = {
-  name: vnetName
-  location: location
-  properties: {
-    addressSpace: {
-      addressPrefixes: [
-        vnetAddressPrefix
-      ]
-    }
-    subnets: [ for (subnet,i) in subnets: {
-      name: subnet.name
-      properties: {
-        addressPrefix: subnet.subnetPrefix
-        networkSecurityGroup: subnet.name == 'appgwSubnet' ? null : {
-          id: networkSecurityGroup[i].id
-        }
-        routeTable: subnet.name == 'appgwSubnet' ? null : {
-          id: routeTableId
+module appGateway 'modules/network/appgateway.bicep' = {
+  scope: az.resourceGroup(resourceGroups[2])
+  name: 'sncappgw'
+  params: {
+    location: variables.location
+    applicationGatewayName: 'SNCApplicationGateway'
+    sku: 'WAF_v2'
+    tier: 'WAF_v2'
+    zoneRedundant: false
+    enableWebApplicationFirewall: false
+    firewallPolicyName: 'MyFirewallPolicyName'
+    publicIpAddressName: 'sncappgwpip'
+    vNetResourceGroup: resourceGroup[0].name
+    vNetName: virtualNetwork.name
+    subnetName: variables.subnets[2].name
+    frontEndPorts: [
+      {
+        name: 'port_80'
+        port: 80
+      }
+    ]
+    httpListeners: [
+      {
+        name: 'MyHttpListener'
+        protocol: 'Http'        
+        frontEndPort: 'port_80'
+      }
+    ]
+    backendAddressPools: [
+      {
+        name: 'MyBackendPool'
+        backendAddresses: [
+          {
+            ipAddress: '10.1.2.3'
+          }
+        ]
+      }
+    ]
+    backendHttpSettings: [
+      {
+        name: 'MyBackendHttpSetting'
+        port: 80
+        protocol: 'Http'
+        cookieBasedAffinity: 'Enabled'
+        affinityCookieName: 'MyCookieAffinityName'
+        requestTimeout: 300
+        connectionDraining: {
+          drainTimeoutInSec: 60
+          enabled: true
         }
       }
-    }]
+    ]
+    rules: [
+      {
+        name: 'MyRuleName'
+        ruleType: 'Basic'
+        listener: 'MyHttpListener'
+        backendPool: 'MyBackendPool'
+        backendHttpSettings: 'MyBackendHttpSetting'
+      }
+    ]
+    // enableDeleteLock: true
+    // enableDiagnostics: true
+    // logAnalyticsWorkspaceId: ''
+    // diagnosticStorageAccountId: ''
   }
+  dependsOn: [
+    virtualNetwork
+    virtualNetwork2
+  ]
 }
