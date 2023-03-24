@@ -1,71 +1,84 @@
-module appGateway 'modules/network/appgateway.bicep' = {
-  scope: az.resourceGroup(resourceGroups[2])
-  name: 'sncappgw'
-  params: {
-    location: variables.location
-    applicationGatewayName: 'SNCApplicationGateway'
-    sku: 'WAF_v2'
-    tier: 'WAF_v2'
-    zoneRedundant: false
-    enableWebApplicationFirewall: false
-    firewallPolicyName: 'MyFirewallPolicyName'
-    publicIpAddressName: 'sncappgwpip'
-    vNetResourceGroup: resourceGroup[0].name
-    vNetName: virtualNetwork.name
-    subnetName: variables.subnets[2].name
-    frontEndPorts: [
+@description('Private Link Service name')
+param privateLinkServiceName string
+
+@description('PrivateEndpoint name')
+param privateEndpointName string
+
+@description('Resource Group where the Vnet is Deployed')
+param vNetResourceGroup string
+
+@description('Name of the Vnet')
+param vNetName string
+
+@description('Name of the subnet')
+param subnetName string
+
+@description('Resource Id which requires private endpoint')
+param privateLinkServiceId string
+
+param groupId string
+
+@description('Location')
+param location string = resourceGroup().location
+
+// resource privateLinkService 'Microsoft.Network/privateLinkServices@2022-09-01' = {
+//   name: privateLinkServiceName
+//   location: location
+//   properties: {
+//     ipConfigurations: [
+//       {
+//         name: ''
+//         properties: {
+//           privateIPAllocationMethod: 'Dynamic'
+//           privateIPAddress: 'IPv4'
+//           subnet: {
+//             id: resourceId(subscription().subscriptionId, vNetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', vNetName, subnetName)
+//           }
+//           primary: false
+//         }
+//       }
+//     ]
+//   }
+// }
+
+// resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+//   name: privateDnsZoneName
+//   location: 'global'
+//   properties: {}
+//   dependsOn: [
+//     vnet
+//   ]
+// }
+
+// resource privateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+//   parent: privateDnsZone
+//   name: '${privateDnsZoneName}-link'
+//   location: 'global'
+//   properties: {
+//     registrationEnabled: false
+//     virtualNetwork: {
+//       id: vnet.id
+//     }
+//   }
+// }
+
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-01-01' = {
+  name: privateEndpointName
+  location: location
+  properties: {
+    privateLinkServiceConnections: [
       {
-        name: 'port_80'
-        port: 80
-      }
-    ]
-    httpListeners: [
-      {
-        name: 'MyHttpListener'
-        protocol: 'Http'        
-        frontEndPort: 'port_80'
-      }
-    ]
-    backendAddressPools: [
-      {
-        name: 'MyBackendPool'
-        backendAddresses: [
-          {
-            ipAddress: '10.1.2.3'
-          }
-        ]
-      }
-    ]
-    backendHttpSettings: [
-      {
-        name: 'MyBackendHttpSetting'
-        port: 80
-        protocol: 'Http'
-        cookieBasedAffinity: 'Enabled'
-        affinityCookieName: 'MyCookieAffinityName'
-        requestTimeout: 300
-        connectionDraining: {
-          drainTimeoutInSec: 60
-          enabled: true
+        name: privateLinkServiceName
+        properties: {
+          privateLinkServiceId: privateLinkServiceId
+          groupIds: [
+            groupId
+          ]
         }
       }
     ]
-    rules: [
-      {
-        name: 'MyRuleName'
-        ruleType: 'Basic'
-        listener: 'MyHttpListener'
-        backendPool: 'MyBackendPool'
-        backendHttpSettings: 'MyBackendHttpSetting'
-      }
-    ]
-    // enableDeleteLock: true
-    // enableDiagnostics: true
-    // logAnalyticsWorkspaceId: ''
-    // diagnosticStorageAccountId: ''
+    subnet: {
+      id: resourceId(subscription().subscriptionId, vNetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', vNetName, subnetName)
+    }
   }
-  dependsOn: [
-    virtualNetwork
-    virtualNetwork2
-  ]
 }
